@@ -5,6 +5,8 @@ import DataForm from "./pages/Dataform";
 import ViewData from "./pages/ViewData";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 export default function App() {
   const handleLogout = () => {
     localStorage.removeItem("token"); // remove JWT
@@ -13,24 +15,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <nav className="p-4 bg-gray-950 text-white flex justify-center gap-6">
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Signup</Link>
-        <Link to="/form">Form</Link>
-        <Link to="/view">View</Link>
-
-         {/* Logout button only if logged in */}
-      {localStorage.getItem("token") && (
-      <button
-      onClick={handleLogout}
-      className="ml-4 px-3 py-1 bg-red-600 rounded hover:bg-red-700"
-      >
-      Logout
-      </button>
-      
-      )}
-      </nav>
-
+   <Navbar />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} /> 
@@ -54,6 +39,7 @@ export default function App() {
           }
         />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }
