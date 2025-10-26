@@ -8,11 +8,6 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 export default function App() {
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // remove JWT
-    window.location.href = "/login";   // redirect to login
-    };
-
   return (
     <BrowserRouter>
    <Navbar />
