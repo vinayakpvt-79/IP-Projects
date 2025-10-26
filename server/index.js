@@ -4,8 +4,11 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 import bodyParser from "body-parser";
 import User from "./models/User.js"
-import { MONGO_URI, JWT_SECRET } from "./config.js";
+import {JWT_SECRET,MONGO_URI}  from "./config.js";
 import bcrypt from "bcryptjs";
+import FormData from "./models/FormData.js";
+import authMiddleware from "./midleware/auth.js";
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -52,5 +55,37 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 });
+
+
+// POST - Save form data
+app.post("/api/form", authMiddleware, async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    if (!title) return res.status(400).json({ msg: "Title is required" });
+
+    const newForm = await FormData.create({
+      userId: req.userId,
+      title,
+      description
+    });
+
+    res.json({ msg: "Form saved", form: newForm });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+// GET - Fetch form data for logged-in user
+app.get("/api/form", authMiddleware, async (req, res) => {
+  try {
+    const data = await FormData.find({ userId: req.userId }).sort({ createdAt: -1 });
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));

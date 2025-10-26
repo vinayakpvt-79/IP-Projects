@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { login } from "../Api.js";
-import AnimatedForm from "../components/AnimatedForm";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -14,6 +13,7 @@ export default function Login() {
     if (res.token) {
       localStorage.setItem("token", res.token);
       alert("Login successful!");
+      window.location.href = "/form";
     } else {
       alert(res.msg || "Login failed");
     }
